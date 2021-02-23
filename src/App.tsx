@@ -6,7 +6,7 @@ import { Widget, ThemeToggle } from './components';
 
 const THEME = 'theme';
 
-const App: React.FC = () => {
+const App = (): JSX.Element => {
   const [theme, setTheme] = useState<Theme>((localStorage.getItem(THEME) as Theme) || Theme.LIGHT);
 
   const toggleTheme = () =>

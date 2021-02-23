@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { Widget } from './Widget';
@@ -120,6 +120,27 @@ describe('Widget', () => {
     const exchangeBtn = screen.getByRole('button', { name: /sell usd for eur/i });
 
     userEvent.click(exchangeBtn);
+
+    expect(baseInput).toHaveValue('');
+    expect(targetInput).toHaveValue('');
+
+    expect(screen.getByText(/0 \$/i)).toBeInTheDocument();
+    expect(screen.getByText(/1328\.20 €/i)).toBeInTheDocument();
+  });
+
+  it('should render change wallet amounts when click on enter key', async () => {
+    render(<Widget />);
+
+    await act(() => mockRatePromise);
+
+    const [baseInput, targetInput] = screen.queryAllByRole('textbox');
+
+    userEvent.type(baseInput, '1000');
+
+    expect(baseInput).toHaveValue('-1000');
+    expect(targetInput).toHaveValue('+828.20');
+
+    fireEvent.keyDown(baseInput, { key: 'Enter' });
 
     expect(baseInput).toHaveValue('');
     expect(targetInput).toHaveValue('');

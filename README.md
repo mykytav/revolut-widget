@@ -1,5 +1,7 @@
 # Revolut widget task
 
+## Open [widget](https://revolut-widget.netlify.app/) on netlify
+
 In the project directory, you can run:
 
 ### `yarn start`

@@ -1,4 +1,4 @@
-import { removeLeadingZeroes, stringifyWithLastZero, addSing } from './inputValueOperations';
+import { removeLeadingZeroes, stringifyWithLastZero, addSign } from './inputValueOperations';
 
 describe('inputValueOperations', () => {
   describe('removeLeadingZeroes', () => {
@@ -25,11 +25,11 @@ describe('inputValueOperations', () => {
 
   describe('addSing', () => {
     it('add sign base on input and operation', () => {
-      expect(addSing('100', true, false)).toBe('-100');
-      expect(addSing('100', true, true)).toBe('+100');
-      expect(addSing('100', false, false)).toBe('+100');
-      expect(addSing('100', false, true)).toBe('-100');
-      expect(addSing('', false, true)).toBe('');
+      expect(addSign('100', true, false)).toBe('-100');
+      expect(addSign('100', true, true)).toBe('+100');
+      expect(addSign('100', false, false)).toBe('+100');
+      expect(addSign('100', false, true)).toBe('-100');
+      expect(addSign('', false, true)).toBe('');
     });
   });
 });

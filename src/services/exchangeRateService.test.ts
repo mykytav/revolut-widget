@@ -33,11 +33,11 @@ describe('getTargetCurrencyRate', () => {
       `${RATES_API_URL}?base=${Currencies.USD}&symbols=${Currencies.EUR}`
     );
 
-    await getTargetCurrencyRate(Currencies.GBP, Currencies.RUB);
+    await getTargetCurrencyRate(Currencies.GBP, Currencies.USD);
 
     expect(window.fetch).toHaveBeenCalledTimes(3);
     expect(window.fetch).toHaveBeenLastCalledWith(
-      `${RATES_API_URL}?base=${Currencies.GBP}&symbols=${Currencies.RUB}`
+      `${RATES_API_URL}?base=${Currencies.GBP}&symbols=${Currencies.USD}`
     );
   });
 });

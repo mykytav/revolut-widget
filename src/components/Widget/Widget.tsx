@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useReducer, useState } from 'react';
 
 import { useIntervalWithInitialCbCall } from '../../hooks';
 import { getTargetCurrencyRate } from '../../services/exchangeRateService';
-import { Currencies, CURRENCY_SIGNS, REFRESH_INTERVAL } from '../../const';
+import { Currencies, CURRENCY_SIGNS, MAX_INTEGER_LENGTH, REFRESH_INTERVAL } from '../../const';
 import {
   INPUT_VALUE_AMOUNT_REGEX,
   removeLeadingZeroes,
@@ -48,7 +48,7 @@ type OnSetAllFundsArgs = {
   rateCb: (isSellingBase: boolean, exchangeRate: number) => number;
 };
 
-export const Widget: React.FC = () => {
+export const Widget = (): JSX.Element => {
   const [currenciesState, currenciesDispatch] = useReducer(
     currenciesExchangeReducer,
     currenciesExchangeInitialState
@@ -108,6 +108,10 @@ export const Widget: React.FC = () => {
 
   const onInputChange = useCallback(
     ({ value, baseCb, targetCb, targetInput = false }: OnInputChangeArgs) => {
+      if (value.length > MAX_INTEGER_LENGTH && value[MAX_INTEGER_LENGTH] !== '.') {
+        return undefined;
+      }
+
       if (value === '') {
         return currenciesDispatch(clearInputs());
       }
@@ -209,9 +213,15 @@ export const Widget: React.FC = () => {
 
   const handleOperationChange = () => currenciesDispatch(setIsSellingBase());
 
+  const isExchangeAmountProvided =
+    parseFloat(baseInputValue) > 0 && parseFloat(targetInputValue) > 0;
+  const isSufficientFunds = isSellingBase
+    ? parseFloat(baseInputValue) <= (walletState[baseCurrency] || 0)
+    : parseFloat(targetInputValue) <= (walletState[targetCurrency] || 0);
+
   useEffect(() => {
     const handleEnterPress = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' && isExchangeAmountProvided && isSufficientFunds) {
         onExchange();
       }
     };
@@ -221,18 +231,11 @@ export const Widget: React.FC = () => {
     return () => {
       window.removeEventListener('keydown', handleEnterPress);
     };
-  }, [onExchange]);
+  }, [onExchange, isExchangeAmountProvided, isSufficientFunds]);
 
   const baseCurrencySign = CURRENCY_SIGNS[baseCurrency];
   const targetCurrencySign = CURRENCY_SIGNS[targetCurrency];
-
   const operation = isSellingBase ? 'Sell' : 'Buy';
-
-  const isExchangeAmountProvided =
-    parseFloat(baseInputValue) > 0 && parseFloat(targetInputValue) > 0;
-  const isSufficientFunds = isSellingBase
-    ? parseFloat(baseInputValue) <= (walletState[baseCurrency] || 0)
-    : parseFloat(targetInputValue) <= (walletState[targetCurrency] || 0);
 
   return (
     <S.Container>
@@ -268,7 +271,7 @@ export const Widget: React.FC = () => {
 
       <S.TransactionSwap
         data-testid="swap-transaction"
-        className={!isSellingBase ? 'upside' : ''}
+        upside={!isSellingBase}
         onClick={handleOperationChange}
       >
         <ArrowSvg />

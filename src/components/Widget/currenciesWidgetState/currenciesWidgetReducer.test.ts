@@ -24,12 +24,12 @@ describe('currenciesWidgetReducer', () => {
   it('should handle SET_BASE_CURRENCY action', () => {
     const newState = currenciesExchangeReducer(
       initialState,
-      actions.setBaseCurrency(Currencies.JPY)
+      actions.setBaseCurrency(Currencies.GBP)
     );
 
     expect(newState).toStrictEqual({
       ...initialState,
-      baseCurrency: Currencies.JPY,
+      baseCurrency: Currencies.GBP,
     });
   });
 
@@ -54,12 +54,12 @@ describe('currenciesWidgetReducer', () => {
   it('should handle SET_TARGET_CURRENCY action', () => {
     const newState = currenciesExchangeReducer(
       initialState,
-      actions.setTargetCurrency(Currencies.RUB)
+      actions.setTargetCurrency(Currencies.EUR)
     );
 
     expect(newState).toStrictEqual({
       ...initialState,
-      targetCurrency: Currencies.RUB,
+      targetCurrency: Currencies.EUR,
     });
   });
 

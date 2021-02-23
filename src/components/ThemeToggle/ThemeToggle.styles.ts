@@ -8,24 +8,6 @@ export const Label = styled.label`
   margin: 20px 0 0 20px;
 `;
 
-export const Input = styled.input`
-  opacity: 0;
-  width: 0;
-  height: 0;
-
-  :checked + .slider {
-    background-color: ${({ theme }) => theme.blue};
-  }
-
-  :checked + .slider:before {
-    transform: translateX(24px);
-  }
-
-  :focus + .slider {
-    box-shadow: ${({ theme }) => `0 0 2px ${theme.text}`};
-  }
-`;
-
 export const Slider = styled.span`
   position: absolute;
   cursor: pointer;
@@ -47,5 +29,23 @@ export const Slider = styled.span`
     bottom: 3px;
     background-color: ${({ theme }) => theme.white};
     transition: 0.4s;
+  }
+`;
+
+export const Input = styled.input`
+  opacity: 0;
+  width: 0;
+  height: 0;
+
+  :checked + ${Slider} {
+    background-color: ${({ theme }) => theme.blue};
+  }
+
+  :checked + ${Slider}:before {
+    transform: translateX(24px);
+  }
+
+  :focus + ${Slider} {
+    box-shadow: ${({ theme }) => `0 0 2px ${theme.text}`};
   }
 `;

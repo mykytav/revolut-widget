@@ -18,7 +18,7 @@ export const stringifyWithLastZero = (value: number): string => {
   return String(value);
 };
 
-export const addSing = (value: string, isSellingBase: boolean, isTargetRow?: boolean): string => {
+export const addSign = (value: string, isSellingBase: boolean, isTargetRow?: boolean): string => {
   if (!value) return value;
 
   if (isTargetRow) {

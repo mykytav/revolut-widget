@@ -11,7 +11,7 @@ describe('ExchangeButton', () => {
 
     render(
       <ExchangeButton
-        baseCurrency={Currencies.JPY}
+        baseCurrency={Currencies.USD}
         isExchangeAmountProvided={false}
         isSellingBase={false}
         isSufficientFunds={false}
@@ -24,7 +24,7 @@ describe('ExchangeButton', () => {
     const button = screen.getByRole('button');
 
     expect(button).toBeDisabled();
-    expect(screen.getByText(`Sell ${Currencies.JPY} with ${Currencies.GBP}`)).toBeInTheDocument();
+    expect(screen.getByText(`Sell ${Currencies.USD} with ${Currencies.GBP}`)).toBeInTheDocument();
 
     userEvent.click(button);
 
@@ -36,7 +36,7 @@ describe('ExchangeButton', () => {
 
     render(
       <ExchangeButton
-        baseCurrency={Currencies.JPY}
+        baseCurrency={Currencies.USD}
         isExchangeAmountProvided
         isSellingBase={false}
         isSufficientFunds
@@ -60,7 +60,7 @@ describe('ExchangeButton', () => {
 
     render(
       <ExchangeButton
-        baseCurrency={Currencies.JPY}
+        baseCurrency={Currencies.USD}
         isExchangeAmountProvided
         isSellingBase
         isSufficientFunds
@@ -70,6 +70,6 @@ describe('ExchangeButton', () => {
       />
     );
 
-    expect(screen.getByText(`Buy ${Currencies.JPY} for ${Currencies.GBP}`)).toBeInTheDocument();
+    expect(screen.getByText(`Buy ${Currencies.USD} for ${Currencies.GBP}`)).toBeInTheDocument();
   });
 });

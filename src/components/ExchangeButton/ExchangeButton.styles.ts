@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const ExchangeButton = styled.button`
   border: none;
@@ -18,5 +18,10 @@ export const ExchangeButton = styled.button`
   :disabled {
     opacity: 0.4;
     cursor: not-allowed;
+  }
+
+  @media (max-width: ${({ theme }) => theme.mobileWidth}) {
+    padding: 2rem 4rem;
+    width: 100%;
   }
 `;

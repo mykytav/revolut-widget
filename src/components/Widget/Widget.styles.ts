@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const ErrorMessage = styled.div`
   display: flex;
@@ -20,6 +20,16 @@ export const Container = styled.div`
   background-color: ${({ theme }) => theme.lightBg};
   padding: 2rem 8rem;
   position: relative;
+  max-width: 1600px;
+  margin: 0 auto;
+
+  @media (max-width: ${({ theme }) => theme.tabletWidth}) {
+    padding: 2rem 4rem;
+  }
+
+  @media (max-width: ${({ theme }) => theme.mobileWidth}) {
+    padding: 2rem;
+  }
 `;
 
 export const Title = styled.h2`
@@ -30,7 +40,7 @@ export const Title = styled.h2`
 
 export const MarketOrder = styled.div`
   color: ${({ theme }) => theme.blue};
-  margin-bottom: 2rem;
+  margin-bottom: 5rem;
   font-size: 2rem;
 
   span {
@@ -49,11 +59,13 @@ export const Block = styled.div<{
   width: ${({ width }) => `${width} || 100%`};
 
   @media (max-width: ${({ theme }) => theme.mobileWidth}) {
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
 `;
 
-export const TransactionSwap = styled.button`
+export const TransactionSwap = styled.button<{ upside: boolean }>`
   width: 6rem;
   height: 6rem;
   border-radius: 50%;
@@ -63,7 +75,7 @@ export const TransactionSwap = styled.button`
   left: 0;
   right: 0;
   top: 50%;
-  margin: -1.75rem auto 0;
+  margin: 0 auto;
   outline: none;
   font-size: 3rem;
 
@@ -78,9 +90,16 @@ export const TransactionSwap = styled.button`
     height: 2.5rem;
   }
 
-  &.upside {
-    svg {
-      transform: rotate(180deg);
-    }
+  ${({ upside }) =>
+    upside &&
+    css`
+      svg {
+        transform: rotate(180deg);
+      }
+    `};
+
+  @media (max-width: ${({ theme }) => theme.mobileWidth}) {
+    align-items: flex-start;
+    margin: 0 auto;
   }
 `;

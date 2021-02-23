@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const CurrencyRow = styled.div`
   border-radius: 2.5rem;
@@ -10,6 +10,7 @@ export const CurrencyRow = styled.div`
 
   @media (max-width: ${({ theme }) => theme.mobileWidth}) {
     flex-direction: column;
+    padding: 4rem 1rem;
   }
 `;
 
@@ -30,6 +31,11 @@ export const SelectWrapper = styled.div`
     :hover {
       cursor: pointer;
     }
+
+    @media (max-width: ${({ theme }) => theme.mobileWidth}) {
+      right: 2rem;
+      top: 0;
+    }
   }
 `;
 
@@ -48,6 +54,8 @@ export const Select = styled.select`
   @media (max-width: ${({ theme }) => theme.mobileWidth}) {
     padding: 0;
     font-size: 2rem;
+    width: 10rem;
+    margin-bottom: 0;
   }
 `;
 
@@ -58,6 +66,10 @@ export const Balance = styled.div`
   span {
     cursor: pointer;
   }
+
+  @media (max-width: ${({ theme }) => theme.mobileWidth}) {
+    font-size: 1.25rem;
+  }
 `;
 
 export const Input = styled.input`
@@ -65,7 +77,7 @@ export const Input = styled.input`
   color: ${({ theme }) => theme.text};
   font-size: 3rem;
   background: transparent;
-  width: 20rem;
+  width: 22rem;
   outline: none;
   border: 0;
   text-align: right;
@@ -78,6 +90,7 @@ export const Input = styled.input`
     font-size: 2rem;
     text-align: left;
     margin-top: 2rem;
+    width: 15rem;
   }
 `;
 

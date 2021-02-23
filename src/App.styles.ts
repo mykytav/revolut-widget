@@ -39,11 +39,7 @@ export const GlobalStyles = createGlobalStyle<{ theme: typeof lightTheme }>`
     font-size: 12px;
 
     @media (max-width: ${({ theme }) => theme.tabletWidth}) {
-      font-size: 9px;
-    }
-
-    @media (max-width: ${({ theme }) => theme.mobileWidth}) {
-      font-size: 8px;
+      font-size: 10px;
     }
     
   }

@@ -5,7 +5,7 @@ import { ReactComponent as ArrowDownSvg } from '../../assets/downArrow.svg';
 import { WalletState } from '../Widget/walletState/walletReducer';
 import * as S from './CurrencyRow.styles';
 import { Block } from '../Widget/Widget.styles';
-import { addSing, stringifyWithLastZero } from '../../helpers';
+import { addSign, stringifyWithLastZero } from '../../helpers';
 
 type CurrencyRowProps = {
   currency: Currencies;
@@ -58,7 +58,7 @@ export const CurrencyRow: React.FC<CurrencyRowProps> = ({
           onChange={onInputChange}
           placeholder="0"
           type="text"
-          value={addSing(inputValue, isSellingBase, isTargetRow)}
+          value={addSign(inputValue, isSellingBase, isTargetRow)}
         />
         {inputValue && (isTargetRow ? !isSellingBase : isSellingBase) && !isSufficientFunds && (
           <S.Error>exceed balance</S.Error>
