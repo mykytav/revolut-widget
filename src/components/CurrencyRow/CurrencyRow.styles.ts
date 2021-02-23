@@ -87,7 +87,7 @@ export const Input = styled.input`
   }
 
   @media (max-width: ${({ theme }) => theme.mobileWidth}) {
-    font-size: 2rem;
+    font-size: 1.5rem;
     text-align: left;
     margin-top: 2rem;
     width: 15rem;
