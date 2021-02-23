@@ -10,7 +10,7 @@ type CbDependencies = {
 
 export const useIntervalWithInitialCbCall = (
   callback: () => void,
-  delay: number,
+  delay: number | null,
   { isSellingBase, baseCurrency, targetCurrency }: CbDependencies
 ): void => {
   const savedCallback = useRef<() => void>();
@@ -23,7 +23,6 @@ export const useIntervalWithInitialCbCall = (
     savedCallback.current!();
   }, [isSellingBase, targetCurrency, baseCurrency]);
 
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
     const fn = () => savedCallback.current!();
 
@@ -31,5 +30,7 @@ export const useIntervalWithInitialCbCall = (
       const id = setInterval(fn, delay);
       return () => clearInterval(id);
     }
+
+    return undefined;
   }, [delay, isSellingBase, targetCurrency, baseCurrency]);
 };

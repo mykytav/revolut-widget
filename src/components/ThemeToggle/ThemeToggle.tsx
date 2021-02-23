@@ -7,7 +7,7 @@ export const ThemeToggle: React.FC<{
   checked: boolean;
 }> = ({ onChange, checked }) => {
   return (
-    <S.Label>
+    <S.Label data-testid="theme-toggle">
       <S.Input checked={checked} type="checkbox" onChange={onChange} />
       <S.Slider className="slider" />
     </S.Label>

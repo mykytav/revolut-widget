@@ -1,16 +1,17 @@
-import React, { useCallback, useReducer, useState } from 'react';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 
 import { useIntervalWithInitialCbCall } from '../../hooks';
 import { getTargetCurrencyRate } from '../../services/exchangeRateService';
 import { Currencies, CURRENCY_SIGNS, REFRESH_INTERVAL } from '../../const';
 import {
   INPUT_VALUE_AMOUNT_REGEX,
-  fixLeadingZeroes,
+  removeLeadingZeroes,
   round,
   VALUES_EXCLUDED_FROM_EXCHANGE,
   getRate,
   getBaseInputRate,
   getTargetInputRate,
+  stringifyWithLastZero,
 } from '../../helpers';
 import {
   setExchangeRate,
@@ -29,6 +30,7 @@ import {
 import { exchange } from './walletState/walletActions';
 import { walletInitialState, walletReducer } from './walletState/walletReducer';
 import { CurrencyRow } from '..';
+import { ExchangeButton } from '../ExchangeButton/ExchangeButton';
 import { ReactComponent as ArrowSvg } from '../../assets/arrow.svg';
 import * as S from './Widget.styles';
 
@@ -89,12 +91,14 @@ export const Widget: React.FC = () => {
 
   const updateInputs = useCallback(
     ({ value, baseCb, targetCb, targetInput = false }: OnInputChangeArgs) => {
-      const formattedValue = fixLeadingZeroes(value);
+      const formattedValue = removeLeadingZeroes(value);
       currenciesDispatch(baseCb(formattedValue));
 
       if (!VALUES_EXCLUDED_FROM_EXCHANGE.includes(formattedValue)) {
         const rate = getRate({ isSellingBase, exchangeRate, targetInput });
-        currenciesDispatch(targetCb(String(round(parseFloat(formattedValue) * rate))));
+        currenciesDispatch(
+          targetCb(stringifyWithLastZero(round(parseFloat(formattedValue) * rate)))
+        );
       } else {
         currenciesDispatch(targetCb(''));
       }
@@ -188,7 +192,7 @@ export const Widget: React.FC = () => {
       rateCb: getTargetInputRate,
     });
 
-  const onExchange = () => {
+  const onExchange = useCallback(() => {
     walletDispatch(
       exchange({
         [baseCurrency]: isSellingBase
@@ -201,9 +205,23 @@ export const Widget: React.FC = () => {
     );
 
     currenciesDispatch(clearInputs());
-  };
+  }, [baseCurrency, baseInputValue, targetCurrency, targetInputValue, isSellingBase, walletState]);
 
   const handleOperationChange = () => currenciesDispatch(setIsSellingBase());
+
+  useEffect(() => {
+    const handleEnterPress = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        onExchange();
+      }
+    };
+
+    window.addEventListener('keydown', handleEnterPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleEnterPress);
+    };
+  }, [onExchange]);
 
   const baseCurrencySign = CURRENCY_SIGNS[baseCurrency];
   const targetCurrencySign = CURRENCY_SIGNS[targetCurrency];
@@ -220,16 +238,22 @@ export const Widget: React.FC = () => {
     <S.Container>
       {errorMessage && (
         <S.ErrorMessage>
-          {errorMessage} <span onClick={closeErrorMessage}>x</span>
+          {errorMessage}{' '}
+          <span data-testid="close-error-msg" onClick={closeErrorMessage}>
+            x
+          </span>
         </S.ErrorMessage>
       )}
+
       <S.Title>
         {operation} {baseCurrency}
       </S.Title>
+
       <S.MarketOrder>
         Market order <span>at</span> 1{baseCurrencySign} ={' '}
         {isSellingBase ? exchangeRate : round(1 / exchangeRate, 4)} {targetCurrencySign}
       </S.MarketOrder>
+
       <CurrencyRow
         currency={baseCurrency}
         currencySign={baseCurrencySign}
@@ -241,9 +265,15 @@ export const Widget: React.FC = () => {
         setAllAvailableFunds={setAllAvailableBaseFunds}
         walletState={walletState}
       />
-      <S.TransactionSwap className={!isSellingBase ? 'upside' : ''} onClick={handleOperationChange}>
+
+      <S.TransactionSwap
+        data-testid="swap-transaction"
+        className={!isSellingBase ? 'upside' : ''}
+        onClick={handleOperationChange}
+      >
         <ArrowSvg />
       </S.TransactionSwap>
+
       <CurrencyRow
         isTargetRow
         currency={targetCurrency}
@@ -256,14 +286,16 @@ export const Widget: React.FC = () => {
         setAllAvailableFunds={setAllAvailableTargetFunds}
         walletState={walletState}
       />
-      <S.Block>
-        <S.ExchangeButton
-          disabled={!isExchangeAmountProvided || !isSufficientFunds}
-          onClick={onExchange}
-        >
-          {operation} {baseCurrency} {isSellingBase ? 'for' : 'with'} {targetCurrency}
-        </S.ExchangeButton>
-      </S.Block>
+
+      <ExchangeButton
+        baseCurrency={baseCurrency}
+        isExchangeAmountProvided={isExchangeAmountProvided}
+        isSellingBase={isSellingBase}
+        isSufficientFunds={isSufficientFunds}
+        onExchange={onExchange}
+        operation={operation}
+        targetCurrency={targetCurrency}
+      />
     </S.Container>
   );
 };

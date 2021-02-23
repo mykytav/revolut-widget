@@ -84,24 +84,3 @@ export const TransactionSwap = styled.button`
     }
   }
 `;
-
-export const ExchangeButton = styled.button`
-  border: none;
-  border-radius: 2rem;
-  background-color: ${({ theme }) => theme.blue};
-  color: ${({ theme }) => theme.white};
-  font-size: 2rem;
-  margin: 2rem auto 0;
-  padding: 2rem 8rem;
-  transition: background-color 0.4s linear;
-
-  :hover {
-    cursor: pointer;
-    background-color: ${({ theme }) => theme.exchangeBtnHover};
-  }
-
-  :disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-`;

@@ -5,6 +5,7 @@ import { ReactComponent as ArrowDownSvg } from '../../assets/downArrow.svg';
 import { WalletState } from '../Widget/walletState/walletReducer';
 import * as S from './CurrencyRow.styles';
 import { Block } from '../Widget/Widget.styles';
+import { addSing, stringifyWithLastZero } from '../../helpers';
 
 type CurrencyRowProps = {
   currency: Currencies;
@@ -17,16 +18,6 @@ type CurrencyRowProps = {
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setAllAvailableFunds: () => void;
   walletState: WalletState;
-};
-
-const addSing = (value: string, isSellingBase: boolean, isTargetRow?: boolean): string => {
-  if (!value) return value;
-
-  if (isTargetRow) {
-    return isSellingBase ? `+${value}` : `-${value}`;
-  }
-
-  return isSellingBase ? `-${value}` : `+${value}`;
 };
 
 export const CurrencyRow: React.FC<CurrencyRowProps> = ({
@@ -57,7 +48,8 @@ export const CurrencyRow: React.FC<CurrencyRowProps> = ({
         <S.Balance>
           {currency} balance: &nbsp;
           <span onClick={setAllAvailableFunds}>
-            {walletState[currency] || 0} {currencySign}
+            {walletState[currency] ? stringifyWithLastZero(walletState[currency]!) : 0}{' '}
+            {currencySign}
           </span>
         </S.Balance>
       </Block>
